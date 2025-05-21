@@ -1,0 +1,10 @@
+<clickhouse>
+  <logger>
+    <level>information</level>
+  </logger>
+  <asynchronous_metric_log remove="1" />
+  <processors_profile_log remove="1" />
+  <latency_log remove="1" />
+  <metric_log remove="1" />
+  <trace_log remove="1" />
+</clickhouse>

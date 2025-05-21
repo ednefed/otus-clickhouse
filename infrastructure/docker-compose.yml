@@ -1,0 +1,33 @@
+---
+services:
+  clickhouse:
+    image: docker.io/library/clickhouse:25.4
+    hostname: clickhouse
+    user: root
+    environment:
+      CLICKHOUSE_PASSWORD: "default"
+      CLICKHOUSE_UID: 0
+    healthcheck:
+      test: clickhouse-client -q 'select 1'
+      interval: 5s
+      retries: 12
+      start_period: 5s
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - type: volume
+        source: clickhouse_data
+        target: /var/lib/clickhouse
+      - type: bind
+        source: ./users.d
+        target: /etc/clickhouse-server/users.d
+      - type: bind
+        source: ./config.d
+        target: /etc/clickhouse-server/config.d
+      - type: bind
+        source: /opt/works
+        target: /opt/works
+
+volumes:
+  clickhouse_data:
