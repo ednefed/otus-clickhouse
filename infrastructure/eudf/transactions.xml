@@ -1,0 +1,34 @@
+<functions>
+  <function>
+    <type>executable</type>
+    <name>transactionTotalEUDF</name>
+    <return_type>Decimal256(2)</return_type>
+    <argument>
+      <type>UInt8</type>
+      <name>quantity</name>
+    </argument>
+    <argument>
+      <type>Decimal32(2)</type>
+      <name>price</name>
+    </argument>
+    <format>CSV</format>
+    <command>/var/lib/clickhouse/user_scripts/transactionTotalEUDF.sh</command>
+    <execute_direct>0</execute_direct>
+  </function>
+  <function>
+    <type>executable</type>
+    <name>transactionCategoryEUDF</name>
+    <return_type>String</return_type>
+    <argument>
+      <type>UInt8</type>
+      <name>quantity</name>
+    </argument>
+    <argument>
+      <type>Decimal32(2)</type>
+      <name>price</name>
+    </argument>
+    <format>CSV</format>
+    <command>/var/lib/clickhouse/user_scripts/transactionCategoryEUDF.sh</command>
+    <execute_direct>0</execute_direct>
+  </function>
+</functions>

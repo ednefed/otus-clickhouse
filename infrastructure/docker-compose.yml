@@ -26,6 +26,12 @@ services:
         source: ./config.d
         target: /etc/clickhouse-server/config.d
       - type: bind
+        source: ./user_scripts
+        target: /var/lib/clickhouse/user_scripts
+      - type: bind
+        source: ./eudf
+        target: /etc/clickhouse-server/eudf
+      - type: bind
         source: /opt/works
         target: /opt/works
 
