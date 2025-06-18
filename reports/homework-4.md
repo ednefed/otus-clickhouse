@@ -254,12 +254,12 @@ clickhouse :)
 
 ## Вариант 2 -- EUDF
 ### 1 Настроить среду для использования EUDF
-Местоположение конфигурационных файлов для EUDF я описал в [](../infrastructure/config.d/udf.xml).
+Местоположение конфигурационных файлов для EUDF я описал в [udf.xml](../infrastructure/config.d/udf.xml).
 
 ### 2 EUDF для расчёта общей цены для каждой транзакции
-В качестве движка я сипользовал простой bash-скрипт [](../infrastructure/user_scripts/transactionTotalEUDF.sh). Скрипт после запуска бесконечно принимает аргументы в STDIN и отдаёт результаты в STDOUT.
-Этот скрипт размещается в контейнере с БД в каталоге /var/lib/clickhouse/user_scripts, см. [](../infrastructure/docker-compose.yml).
-Путь к этому скрипту и описание самой EUDF находится в файле [](../infrastructure/eudf/transactions.xml).
+В качестве движка я сипользовал простой bash-скрипт [transactionTotalEUDF.sh](../infrastructure/user_scripts/transactionTotalEUDF.sh). Скрипт после запуска бесконечно принимает аргументы в STDIN и отдаёт результаты в STDOUT.
+Этот скрипт размещается в контейнере с БД в каталоге /var/lib/clickhouse/user_scripts, см. [docker-compose.yml](../infrastructure/docker-compose.yml).
+Путь к этому скрипту и описание самой EUDF находится в файле [transactions.xml](../infrastructure/eudf/transactions.xml).
 Проверим EUDF и сравним результат с UDF из варианта 1:
 ```sql
 clickhouse :) SELECT transactionTotal(quantity, price) as totalUDF, 
@@ -282,8 +282,8 @@ clickhouse :)
 Результа совпал.
 
 ### 3 EUDF для категоризации каждой транзакции
-Аналогично, я использовал bash скрипт [](../infrastructure/user_scripts/transactionCategoryEUDF.sh).
-Путь к этому скрипту и описание самой EUDF добавил в файл [](../infrastructure/eudf/transactions.xml).
+Аналогично, я использовал bash скрипт [transactionCategoryEUDF.sh](../infrastructure/user_scripts/transactionCategoryEUDF.sh).
+Путь к этому скрипту и описание самой EUDF добавил в файл [transactions.xml](../infrastructure/eudf/transactions.xml).
 Проверим EUDF и сравним результат с UDF из варианта 1:
 ```sql
 clickhouse :) SELECT transactionTotal(quantity, price) as totalUDF,
