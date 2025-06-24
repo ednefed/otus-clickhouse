@@ -32,6 +32,9 @@ services:
         source: ./eudf
         target: /etc/clickhouse-server/eudf
       - type: bind
+        source: ./user_files
+        target: /var/lib/clickhouse/user_files
+      - type: bind
         source: /opt/works
         target: /opt/works
 
