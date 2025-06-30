@@ -78,6 +78,8 @@ services:
         source: /opt/works
         target: /opt/works
   clickhouse_2:
+    profiles:
+      - disabled
     depends_on:
       - zookeeper_init
     image: docker.io/library/clickhouse:25.4
@@ -118,6 +120,8 @@ services:
         source: /opt/works
         target: /opt/works
   clickhouse_3:
+    profiles:
+      - disabled
     depends_on:
       - zookeeper_init
     image: docker.io/library/clickhouse:25.4
@@ -158,6 +162,8 @@ services:
         source: /opt/works
         target: /opt/works
   clickhouse_4:
+    profiles:
+      - disabled
     depends_on:
       - zookeeper_init
     image: docker.io/library/clickhouse:25.4
@@ -198,6 +204,8 @@ services:
         source: /opt/works
         target: /opt/works
   clickhouse_5:
+    profiles:
+      - disabled
     depends_on:
       - zookeeper_init
     image: docker.io/library/clickhouse:25.4
@@ -238,6 +246,8 @@ services:
         source: /opt/works
         target: /opt/works
   clickhouse_6:
+    profiles:
+      - disabled
     depends_on:
       - zookeeper_init
     image: docker.io/library/clickhouse:25.4
