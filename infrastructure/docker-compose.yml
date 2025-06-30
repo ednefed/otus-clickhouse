@@ -157,6 +157,126 @@ services:
       - type: bind
         source: /opt/works
         target: /opt/works
+  clickhouse_4:
+    depends_on:
+      - zookeeper_init
+    image: docker.io/library/clickhouse:25.4
+    hostname: clickhouse-4
+    user: root
+    environment:
+      CLICKHOUSE_PASSWORD: "default"
+      CLICKHOUSE_UID: 0
+    healthcheck:
+      test: wget -O /dev/null --no-verbose --tries=1 http://127.0.0.1:8123/ping || exit 1
+      interval: 1s
+      retries: 15
+    ports:
+      - "8126:8123"
+    volumes:
+      - type: volume
+        source: clickhouse_4_data
+        target: /var/lib/clickhouse
+      - type: bind
+        source: ./users.d
+        target: /etc/clickhouse-server/users.d
+      - type: bind
+        source: ./config.d
+        target: /etc/clickhouse-server/config.d
+      - type: bind
+        source: ./macros/clickhouse-4.xml
+        target: /etc/clickhouse-server/config.d/macros.xml
+      - type: bind
+        source: ./user_scripts
+        target: /var/lib/clickhouse/user_scripts
+      - type: bind
+        source: ./eudf
+        target: /etc/clickhouse-server/eudf
+      - type: bind
+        source: ./user_files
+        target: /var/lib/clickhouse/user_files
+      - type: bind
+        source: /opt/works
+        target: /opt/works
+  clickhouse_5:
+    depends_on:
+      - zookeeper_init
+    image: docker.io/library/clickhouse:25.4
+    hostname: clickhouse-5
+    user: root
+    environment:
+      CLICKHOUSE_PASSWORD: "default"
+      CLICKHOUSE_UID: 0
+    healthcheck:
+      test: wget -O /dev/null --no-verbose --tries=1 http://127.0.0.1:8123/ping || exit 1
+      interval: 1s
+      retries: 15
+    ports:
+      - "8127:8123"
+    volumes:
+      - type: volume
+        source: clickhouse_5_data
+        target: /var/lib/clickhouse
+      - type: bind
+        source: ./users.d
+        target: /etc/clickhouse-server/users.d
+      - type: bind
+        source: ./config.d
+        target: /etc/clickhouse-server/config.d
+      - type: bind
+        source: ./macros/clickhouse-5.xml
+        target: /etc/clickhouse-server/config.d/macros.xml
+      - type: bind
+        source: ./user_scripts
+        target: /var/lib/clickhouse/user_scripts
+      - type: bind
+        source: ./eudf
+        target: /etc/clickhouse-server/eudf
+      - type: bind
+        source: ./user_files
+        target: /var/lib/clickhouse/user_files
+      - type: bind
+        source: /opt/works
+        target: /opt/works
+  clickhouse_6:
+    depends_on:
+      - zookeeper_init
+    image: docker.io/library/clickhouse:25.4
+    hostname: clickhouse-6
+    user: root
+    environment:
+      CLICKHOUSE_PASSWORD: "default"
+      CLICKHOUSE_UID: 0
+    healthcheck:
+      test: wget -O /dev/null --no-verbose --tries=1 http://127.0.0.1:8123/ping || exit 1
+      interval: 1s
+      retries: 15
+    ports:
+      - "8128:8123"
+    volumes:
+      - type: volume
+        source: clickhouse_6_data
+        target: /var/lib/clickhouse
+      - type: bind
+        source: ./users.d
+        target: /etc/clickhouse-server/users.d
+      - type: bind
+        source: ./config.d
+        target: /etc/clickhouse-server/config.d
+      - type: bind
+        source: ./macros/clickhouse-6.xml
+        target: /etc/clickhouse-server/config.d/macros.xml
+      - type: bind
+        source: ./user_scripts
+        target: /var/lib/clickhouse/user_scripts
+      - type: bind
+        source: ./eudf
+        target: /etc/clickhouse-server/eudf
+      - type: bind
+        source: ./user_files
+        target: /var/lib/clickhouse/user_files
+      - type: bind
+        source: /opt/works
+        target: /opt/works
 
 volumes:
   zookeeper_data:
@@ -165,3 +285,6 @@ volumes:
   clickhouse_data:
   clickhouse_2_data:
   clickhouse_3_data:
+  clickhouse_4_data:
+  clickhouse_5_data:
+  clickhouse_6_data:

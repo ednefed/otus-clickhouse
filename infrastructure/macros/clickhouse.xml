@@ -1,6 +1,11 @@
 <clickhouse>
   <macros>
-    <cluster>otus</cluster>
+    <cluster>2S3R</cluster>
+    <shard>1</shard>
+    <replica>1</replica>
+  </macros>
+  <macros>
+    <cluster>3S2R</cluster>
     <shard>1</shard>
     <replica>1</replica>
   </macros>
