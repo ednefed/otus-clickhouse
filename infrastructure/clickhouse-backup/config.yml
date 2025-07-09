@@ -1,0 +1,21 @@
+general:
+    remote_storage: s3
+clickhouse:
+    username: default
+    password: "default"
+    host: localhost
+    port: 9000
+    skip_tables:
+        - system.*
+        - INFORMATION_SCHEMA.*
+        - information_schema.*
+        - _temporary_and_external_tables.*
+s3:
+    access_key: "minio"
+    secret_key: "miniosecret"
+    bucket: "clickhouse-backup"
+    endpoint: "http://minio:9000"
+    region: "minio"
+    force_path_style: true
+    path: "backups"
+    object_disk_path: "object-discs"
