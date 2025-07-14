@@ -1,7 +1,0 @@
-<clickhouse>
-  <profiles>
-    <default>
-      <!-- <max_threads>1</max_threads> -->
-    </default>
-  </profiles>
-</clickhouse>

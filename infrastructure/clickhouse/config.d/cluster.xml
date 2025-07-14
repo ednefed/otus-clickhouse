@@ -1,0 +1,23 @@
+<clickhouse>
+  <zookeeper>
+    <node>
+      <host>zookeeper</host>
+      <port>2181</port>
+    </node>
+  </zookeeper>
+  <remote_servers>
+    <otus>
+      <shard>
+        <internal_replication>true</internal_replication>
+        <replica>
+          <host>clickhouse</host>
+          <port>9000</port>
+        </replica>
+        <replica>
+          <host>clickhouse-replica</host>
+          <port>9000</port>
+        </replica>
+      </shard>
+    </otus>
+  </remote_servers>
+</clickhouse>

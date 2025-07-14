@@ -1,6 +1,44 @@
 ---
 services:
+  zookeeper:
+    image: docker.io/zookeeper:3.5.9
+    hostname: zookeeper
+    restart: on-failure
+    healthcheck:
+      test: zkCli.sh get / || exit 1
+      interval: 1s
+      retries: 15
+    volumes:
+      - type: volume
+        source: zookeeper_data
+        target: /data
+      - type: volume
+        source: zookeeper_datalog
+        target: /datalog
+      - type: volume
+        source: zookeeper_logs
+        target: /logs
+  zookeeper_init:
+    depends_on:
+      - zookeeper
+    image: ${ZOOKEEPER_IMAGE:-docker.io/zookeeper}:${ZOOKEEPER_VERSION:-3.5.9}
+    restart: on-failure
+    command:
+      - bash
+      - -c
+      - > 
+        zkCli.sh -server zookeeper:2181 get /clickhouse
+        || zkCli.sh -server zookeeper:2181 create /clickhouse
+    volumes:
+      - type: tmpfs
+        target: /data
+      - type: tmpfs
+        target: /datalog
+      - type: tmpfs
+        target: /logs
   clickhouse:
+    depends_on:
+      - zookeeper_init
     image: docker.io/library/clickhouse:25.4
     hostname: clickhouse
     user: root
@@ -20,19 +58,19 @@ services:
         source: clickhouse_data
         target: /var/lib/clickhouse
       - type: bind
-        source: ./users.d
+        source: ./clickhouse/users.d
         target: /etc/clickhouse-server/users.d
       - type: bind
-        source: ./config.d
+        source: ./clickhouse/config.d
         target: /etc/clickhouse-server/config.d
       - type: bind
-        source: ./user_scripts
+        source: ./clickhouse/user_scripts
         target: /var/lib/clickhouse/user_scripts
       - type: bind
-        source: ./eudf
+        source: ./clickhouse/eudf
         target: /etc/clickhouse-server/eudf
       - type: bind
-        source: ./user_files
+        source: ./clickhouse/user_files
         target: /var/lib/clickhouse/user_files
       - type: bind
         source: ./clickhouse-backup
@@ -40,6 +78,31 @@ services:
       - type: bind
         source: /opt/works
         target: /opt/works
+  clickhouse_replica:
+    depends_on:
+      - zookeeper_init
+    image: docker.io/library/clickhouse:25.4
+    hostname: clickhouse-replica
+    user: root
+    environment:
+      CLICKHOUSE_PASSWORD: "default"
+      CLICKHOUSE_UID: 0
+    healthcheck:
+      test: wget -O /dev/null --no-verbose --tries=1 http://127.0.0.1:8123/ping || exit 1
+      interval: 1s
+      retries: 15
+    ports:
+      - "8124:8123"
+    volumes:
+      - type: volume
+        source: clickhouse_replica_data
+        target: /var/lib/clickhouse
+      - type: bind
+        source: ./clickhouse-replica/users.d
+        target: /etc/clickhouse-server/users.d
+      - type: bind
+        source: ./clickhouse-replica/config.d
+        target: /etc/clickhouse-server/config.d
   minio:
     image: docker.io/bitnami/minio:2024.4.18
     hostname: minio
@@ -56,8 +119,23 @@ services:
       - type: volume
         source: minio_data
         target: /bitnami/minio/data
-
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    hostname: prometheus
+    user: "0"
+    cpus: 0.25
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - type: bind
+        source: ./prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
 
 volumes:
+  zookeeper_data:
+  zookeeper_datalog:
+  zookeeper_logs:
   clickhouse_data:
+  clickhouse_replica_data:
   minio_data:
