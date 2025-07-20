@@ -9,10 +9,15 @@ ednefed@nfd-vm-ubuntu:/opt/Works/otus/clickhouse$
 ```
 Далее, настроим процессоры. PutDatabaseRecord потрубются два Controller Service объекта: Reader и ConnectionPool, отвечющие за чтения входных данных и коннект к базе.
 Для подключения нужно создать типа DPCPConnectionPool, описывающий коннект к БД:
+
 ![dbcpconnectionpool.png](../images/homework-16/dbcpconnectionpool.png)
+
 В качеств ридера будет JsonTreeReader:
+
 ![jsontreereader.png](../images/homework-16/jsontreereader.png)
+
 И сам процессор:
+
 ![putdatabaserecord.png](../images/homework-16/putdatabaserecord.png)
 
 Далее создадим в базе простую таблицу:
@@ -34,9 +39,11 @@ done
 ednefed@nfd-vm-ubuntu:/opt/Works/otus/clickhouse$ 
 ```
 В nifi видно 10 обработанных записей, которые одижают в очереди, т.к PutDatabaseRecord пока выключен. 
+
 ![flow-1.png](../images/homework-16/flow-1.png)
 
 Включим PutDatabaseRecord. Он успешно обработает 10 записей.
+
 ![flow-2.png](../images/homework-16/flow-2.png)
 
 Псомотрим в базу:
