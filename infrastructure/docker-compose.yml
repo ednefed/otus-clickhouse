@@ -174,7 +174,35 @@ services:
       - type: volume
         source: nifi_logs
         target: /opt/nifi/nifi-current/logs
-
+  kafka:
+    image: docker.io/bitnami/kafka:3.7.0
+    hostname: kafka
+    environment:
+      KAFKA_KRAFT_CLUSTER_ID: "49e43e60-dce9-4c9e-8f40-5e0a9f4ea255"
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+    restart: always
+    volumes:
+      - type: volume
+        source: kafka_data
+        target: /bitnami
+  akhq:
+    image: docker.io/tchiotludo/akhq:0.26.0
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            kafka:
+              properties:
+                bootstrap.servers: "kafka:9092"
+    healthcheck:
+      disable: true
+    ports:
+      - "8082:8080"
 
 volumes:
   zookeeper_data:
@@ -194,3 +222,4 @@ volumes:
   nifi_provenance_repository:
   nifi_database_repository:
   nifi_logs:
+  kafka_data:
