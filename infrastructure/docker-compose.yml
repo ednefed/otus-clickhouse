@@ -119,6 +119,9 @@ services:
       - type: volume
         source: minio_data
         target: /bitnami/minio/data
+      - type: volume
+        source: minio_certs
+        target: /certs
   prometheus:
     image: docker.io/prom/prometheus:latest
     hostname: prometheus
@@ -131,6 +134,47 @@ services:
       - type: bind
         source: ./prometheus/prometheus.yml
         target: /etc/prometheus/prometheus.yml
+      - type: volume
+        source: prometheus_data
+        target: /prometheus
+  nifi:
+    image: docker.io/apache/nifi:2.4.0
+    hostname: nifi
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: "admin"
+      SINGLE_USER_CREDENTIALS_PASSWORD: "123456789012"
+    ports:
+      - "8443:8443"
+      - "8081:8081"
+    volumes:
+      - type: volume
+        source: nifi_state
+        target: /opt/nifi/nifi-current/state
+      - type: volume
+        source: nifi_content_repository
+        target: /opt/nifi/nifi-current/content_repository
+      - type: volume
+        source: nifi_flowfile_repository
+        target: /opt/nifi/nifi-current/flowfile_repository
+      - type: volume
+        source: nifi_nar_extensions
+        target: /opt/nifi/nifi-current/nar_extensions
+      - type: volume
+        source: nifi_python_extensions
+        target: /opt/nifi/nifi-current/python_extensions
+      - type: volume
+        source: nifi_conf
+        target: /opt/nifi/nifi-current/conf
+      - type: volume
+        source: nifi_provenance_repository
+        target: /opt/nifi/nifi-current/provenance_repository
+      - type: volume
+        source: nifi_database_repository
+        target: /opt/nifi/nifi-current/database_repository
+      - type: volume
+        source: nifi_logs
+        target: /opt/nifi/nifi-current/logs
+
 
 volumes:
   zookeeper_data:
@@ -139,3 +183,14 @@ volumes:
   clickhouse_data:
   clickhouse_replica_data:
   minio_data:
+  minio_certs:
+  prometheus_data:
+  nifi_state:
+  nifi_content_repository:
+  nifi_flowfile_repository:
+  nifi_nar_extensions:
+  nifi_python_extensions:
+  nifi_conf:
+  nifi_provenance_repository:
+  nifi_database_repository:
+  nifi_logs:
