@@ -215,6 +215,22 @@ services:
       - type: volume
         source: superset_data
         target: /app
+  postgresql:
+    image: docker.io/postgres:15
+    command: >
+      postgres 
+      -c wal_level=logical
+      -c max_replication_slots=10
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: volume
+        source: postgresql_data
+        target: /var/lib/postgresql/data
 
 volumes:
   zookeeper_data:
@@ -236,3 +252,4 @@ volumes:
   nifi_logs:
   kafka_data:
   superset_data:
+  postgresql_data:
