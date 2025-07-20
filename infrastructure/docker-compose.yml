@@ -201,8 +201,20 @@ services:
                 bootstrap.servers: "kafka:9092"
     healthcheck:
       disable: true
+    restart: always
     ports:
       - "8082:8080"
+  superset:
+    image: docker.io/apache/superset:latest
+    environment:
+      SUPERSET_SECRET_KEY: SA63+Nl8QFYt8qxBZVoOp/8X68PbnknMrAdBmrLg/fXgZqd8laOWVb2f
+    restart: always
+    ports:
+      - 8088:8088
+    volumes:
+      - type: volume
+        source: superset_data
+        target: /app
 
 volumes:
   zookeeper_data:
@@ -223,3 +235,4 @@ volumes:
   nifi_database_repository:
   nifi_logs:
   kafka_data:
+  superset_data:
